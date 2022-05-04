@@ -159,6 +159,7 @@ public class ManageCustomersFormController {
 
         } else {
             /*Update customer*/
+            // check git
             try {
                 if (!existCustomer(id)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
