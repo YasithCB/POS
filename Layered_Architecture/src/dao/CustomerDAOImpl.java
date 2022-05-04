@@ -30,4 +30,39 @@ public class CustomerDAOImpl {
         pstm.setString(3, customer.getAddress());
         return pstm.executeUpdate() > 0;
     }
+
+    public boolean updateCustomer(CustomerDTO dto) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        PreparedStatement pstm = connection.prepareStatement("UPDATE Customer SET name=?, address=? WHERE id=?");
+        pstm.setString(1, dto.getName());
+        pstm.setString(2, dto.getAddress());
+        pstm.setString(3, dto.getId());
+        return pstm.executeUpdate() > 0;
+    }
+
+    public boolean existsCustomer(String id) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        PreparedStatement pstm = connection.prepareStatement("SELECT id FROM Customer WHERE id=?");
+        pstm.setString(1, id);
+        return pstm.executeQuery().next();
+    }
+
+    public boolean deleteCustomer(String id) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        PreparedStatement pstm = connection.prepareStatement("DELETE FROM Customer WHERE id=?");
+        pstm.setString(1, id);
+        return pstm.executeUpdate() > 0;
+    }
+
+    public String genarateNewId() throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        ResultSet rst = connection.createStatement().executeQuery("SELECT id FROM Customer ORDER BY id DESC LIMIT 1;");
+        if (rst.next()) {
+            String id = rst.getString("id");
+            int newCustomerId = Integer.parseInt(id.replace("C00-", "")) + 1;
+            return String.format("C00-%03d", newCustomerId);
+        } else {
+            return "C00-001";
+        }
+    }
 }
