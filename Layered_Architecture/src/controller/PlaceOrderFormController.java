@@ -3,6 +3,7 @@ package controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import dao.CrudDAO;
 import dao.CustomerDAOImpl;
 import dao.ItemDAOImpl;
 import db.DBConnection;
@@ -18,7 +19,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import model.CustomerDTO;
 import model.ItemDTO;
 import model.OrderDetailDTO;
 import view.tdm.OrderDetailTM;
@@ -105,7 +105,7 @@ public class PlaceOrderFormController {
                             new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + newValue + "").show();
                         }
                         CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-                        txtCustomerName.setText(customerDAO.SearchCustomer(newValue).getName());
+                        txtCustomerName.setText(customerDAO.Search(newValue).getName());
 
                     } catch (SQLException e) {
                         new Alert(Alert.AlertType.ERROR, "Failed to find the customer " + newValue + "" + e).show();
@@ -132,8 +132,8 @@ public class PlaceOrderFormController {
 //                        throw new NotFoundException("There is no such item associated with the id " + code);
                     }
                     // find query
-                    ItemDAOImpl itemDAO = new ItemDAOImpl();
-                    ItemDTO item = itemDAO.searchItem(newItemCode);
+                    CrudDAO itemDAO = new ItemDAOImpl();
+                    ItemDTO item = itemDAO.search(newItemCode);
 
                     txtDescription.setText(item.getDescription());
                     txtUnitPrice.setText(item.getUnitPrice().setScale(2).toString());
@@ -179,12 +179,12 @@ public class PlaceOrderFormController {
 
     private boolean existItem(String code) throws SQLException, ClassNotFoundException {
         ItemDAOImpl itemDAO = new ItemDAOImpl();
-        return itemDAO.existsItem(code);
+        return itemDAO.exists(code);
     }
 
     boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
         CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-        return customerDAO.existsCustomer(id);
+        return customerDAO.exists(id);
     }
 
     public String generateNewOrderId() {
