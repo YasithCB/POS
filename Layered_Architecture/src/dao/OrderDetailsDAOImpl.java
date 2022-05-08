@@ -13,7 +13,7 @@ public class OrderDetailsDAOImpl implements CrudDAO<OrderDetailDTO, String>{
 
     @Override
     public boolean insert(OrderDetailDTO dto) throws SQLException, ClassNotFoundException {
-        return false;
+        return SQLUtil.executeUpdate("INSERT INTO OrderDetails (oid, itemCode, unitPrice, qty) VALUES (?,?,?,?)",dto.getoId() ,dto.getItemCode(), dto.getUnitPrice());
     }
 
     @Override
@@ -37,7 +37,7 @@ public class OrderDetailsDAOImpl implements CrudDAO<OrderDetailDTO, String>{
     }
 
     @Override
-    public OrderDetailDTO Search(String s) throws SQLException, ClassNotFoundException {
+    public OrderDetailDTO search(String s) throws SQLException, ClassNotFoundException {
         return null;
     }
 }

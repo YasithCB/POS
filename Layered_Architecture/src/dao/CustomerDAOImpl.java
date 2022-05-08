@@ -8,7 +8,16 @@ import java.util.ArrayList;
 public class CustomerDAOImpl implements CrudDAO<CustomerDTO, String> {
     @Override
     public ArrayList<CustomerDTO> getAll() throws SQLException, ClassNotFoundException {
-        return null;
+        ResultSet rs = SQLUtil.executeQuery("SELECT * FROM customer");
+        ArrayList<CustomerDTO> all = new ArrayList<>();
+        while (rs.next()) {
+            all.add(new CustomerDTO(
+                    rs.getString(1),
+                    rs.getString(2),
+                    rs.getString(3)
+            ));
+        }
+        return all;
     }
 
     @Override
@@ -23,7 +32,8 @@ public class CustomerDAOImpl implements CrudDAO<CustomerDTO, String> {
 
     @Override
     public boolean exists(String s) throws SQLException, ClassNotFoundException {
-        return false;
+        ResultSet rs = SQLUtil.executeQuery("SELECT id FROM customer WHERE id=?", s);
+        return rs.next();
     }
 
     @Override
@@ -37,7 +47,15 @@ public class CustomerDAOImpl implements CrudDAO<CustomerDTO, String> {
     }
 
     @Override
-    public CustomerDTO Search(String s) throws SQLException, ClassNotFoundException {
+    public CustomerDTO search(String s) throws SQLException, ClassNotFoundException {
+        ResultSet resultSet = SQLUtil.executeQuery("SELECT * FROM Customer WHERE id=?", s);
+        while (resultSet.next()) {
+            return new CustomerDTO(
+                    resultSet.getString(1),
+                    resultSet.getString(2),
+                    resultSet.getString(3)
+            );
+        }
         return null;
     }
 

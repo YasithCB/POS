@@ -10,7 +10,17 @@ import java.util.ArrayList;
 public class ItemDAOImpl implements CrudDAO<ItemDTO, String>{
     @Override
     public ArrayList<ItemDTO> getAll() throws SQLException, ClassNotFoundException {
-        return null;
+        ResultSet rs = SQLUtil.executeQuery("SELECT * FROM item");
+        ArrayList<ItemDTO> all = new ArrayList<>();
+        while (rs.next()) {
+            all.add(new ItemDTO(
+                    rs.getString(1),
+                    rs.getString(2),
+                    rs.getBigDecimal(3),
+                    rs.getInt(4)
+            ));
+        }
+        return all;
     }
 
     @Override
@@ -20,12 +30,13 @@ public class ItemDAOImpl implements CrudDAO<ItemDTO, String>{
 
     @Override
     public boolean update(ItemDTO dto) throws SQLException, ClassNotFoundException {
-        return false;
+        return SQLUtil.executeUpdate("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?",dto.getDescription(), dto.getUnitPrice(), dto.getQtyOnHand(), dto.getCode());
     }
 
     @Override
     public boolean exists(String s) throws SQLException, ClassNotFoundException {
-        return false;
+        ResultSet rs = SQLUtil.executeQuery("SELECT code FROM Item WHERE code=?", s);
+        return rs.next();
     }
 
     @Override
@@ -39,7 +50,16 @@ public class ItemDAOImpl implements CrudDAO<ItemDTO, String>{
     }
 
     @Override
-    public ItemDTO Search(String s) throws SQLException, ClassNotFoundException {
+    public ItemDTO search(String s) throws SQLException, ClassNotFoundException {
+        ResultSet rs = SQLUtil.executeQuery("SELECT * FROM Item WHERE code=?", s);
+        while (rs.next()) {
+            return new ItemDTO(
+                    rs.getString(1),
+                    rs.getString(2),
+                    rs.getBigDecimal(4),
+                    rs.getInt(3)
+            );
+        }
         return null;
     }
 
