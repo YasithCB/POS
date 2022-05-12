@@ -61,6 +61,11 @@ public class ItemDAOImpl implements ItemDAO {
         return null;
     }
 
+    @Override
+    public ArrayList<ItemDTO> getItemsPriceAbove(double price) throws SQLException, ClassNotFoundException {
+        return null;
+    }
+
     /*public ArrayList<ItemDTO> getAllItems() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.executeQuery("SELECT * FROM Item");
         ArrayList<ItemDTO> allItems = new ArrayList<>();
