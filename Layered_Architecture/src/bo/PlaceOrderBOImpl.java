@@ -9,6 +9,7 @@ import dao.custom.impl.ItemDAOImpl;
 import dao.custom.impl.OrderDAOImpl;
 import dao.custom.impl.OrderDetailsDAOImpl;
 import db.DBConnection;
+import model.CustomerDTO;
 import model.ItemDTO;
 import model.OrderDTO;
 import model.OrderDetailDTO;
@@ -16,6 +17,7 @@ import model.OrderDetailDTO;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlaceOrderBOImpl {
@@ -49,8 +51,7 @@ public class PlaceOrderBOImpl {
             }
 
             //Search & Update Item
-//            ItemDTO item = findItem(dto.getItemCode());
-            ItemDTO item = null;
+            ItemDTO item = findItem(dto.getItemCode());
             item.setQtyOnHand(item.getQtyOnHand() - dto.getQty());
 
             if (!itemDAO.update(item)) {
@@ -65,4 +66,103 @@ public class PlaceOrderBOImpl {
         return true;
 
     }
+
+    public ItemDTO findItem(String code) {
+        try {
+            ItemDTO dto = itemDAO.search(code + "");
+            return new ItemDTO(code, dto.getDescription(), dto.getUnitPrice(), dto.getQtyOnHand());
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to find the Item " + code, e);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public CustomerDTO searchCustomer(String id){
+        try {
+            customerDAO.search(id);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ItemDTO searchItem(String code){
+        try {
+            itemDAO.search(code);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean isItemExists(String code){
+        try {
+            return itemDAO.exists(code);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean isCustomerexists(String id) {
+        try {
+            return customerDAO.exists(id);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public String generateNewOrderId() {
+        try {
+            return orderDAO.generateNewId();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "OID-001";
+    }
+
+    public ArrayList<CustomerDTO> getAllCustomers() {
+        try {
+            return customerDAO.getAll();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ArrayList<ItemDTO> getAllItems() {
+        try {
+            return itemDAO.getAll();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
+
+
+
+
+
+
+
+
+
