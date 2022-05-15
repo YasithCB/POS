@@ -1,5 +1,6 @@
 package controller;
 
+import bo.ItemBOImpl;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import dao.custom.ItemDAO;
@@ -41,7 +42,7 @@ public class ManageItemsFormController {
     public JFXTextField txtUnitPrice;
     public JFXButton btnAddNewItem;
 
-    private final ItemDAO itemDAO = new ItemDAOImpl();
+    private final ItemBOImpl itemBO = new ItemBOImpl();
 
     public void initialize() {
         tblItems.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("code"));
@@ -78,7 +79,7 @@ public class ManageItemsFormController {
         try {
             /*Get all items*/
 
-            ArrayList<ItemDTO> allItems = itemDAO.getAll();
+            ArrayList<ItemDTO> allItems = itemBO.getAllItems();
             for (ItemDTO itemDTO : allItems){
                 tblItems.getItems().add(new ItemTM(itemDTO.getCode(), itemDTO.getDescription(), itemDTO.getUnitPrice(), itemDTO.getQtyOnHand()));
             }

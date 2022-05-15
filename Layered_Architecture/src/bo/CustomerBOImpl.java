@@ -8,11 +8,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CustomerBOImpl {
-    private final CustomerDAO crudDAO = new CustomerDAOImpl();
+    private final CustomerDAO customerDAO = new CustomerDAOImpl();
 
     public ArrayList<CustomerDTO> getAllCustomers() {
         try {
-            return crudDAO.getAll();
+            return customerDAO.getAll();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -23,7 +23,7 @@ public class CustomerBOImpl {
 
     public void saveCustomer(CustomerDTO customerDTO) {
         try {
-            crudDAO.insert(customerDTO);
+            customerDAO.insert(customerDTO);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -33,7 +33,7 @@ public class CustomerBOImpl {
 
     public void updateCustomerDetails(CustomerDTO customerDTO) {
         try {
-            crudDAO.update(customerDTO);
+            customerDAO.update(customerDTO);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -43,7 +43,7 @@ public class CustomerBOImpl {
 
     public boolean isCustomerExists(String id) {
         try {
-            return crudDAO.exists(id);
+            return customerDAO.exists(id);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -54,7 +54,7 @@ public class CustomerBOImpl {
 
     public void deleteCustomer(String id) {
         try {
-            crudDAO.delete(id);
+            customerDAO.delete(id);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -63,6 +63,6 @@ public class CustomerBOImpl {
     }
 
     public String generateNewCustomerId() throws SQLException, ClassNotFoundException {
-        return crudDAO.generateNewId();
+        return customerDAO.generateNewId();
     }
 }
