@@ -7,9 +7,10 @@ import model.CustomerDTO;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class CustomerBOImpl {
+public class CustomerBOImpl implements CustomerBO {
     private final CustomerDAO customerDAO = new CustomerDAOImpl();
 
+    @Override
     public ArrayList<CustomerDTO> getAllCustomers() {
         try {
             return customerDAO.getAll();
@@ -21,6 +22,7 @@ public class CustomerBOImpl {
         return null;
     }
 
+    @Override
     public void saveCustomer(CustomerDTO customerDTO) {
         try {
             customerDAO.insert(customerDTO);
@@ -31,6 +33,7 @@ public class CustomerBOImpl {
         }
     }
 
+    @Override
     public void updateCustomerDetails(CustomerDTO customerDTO) {
         try {
             customerDAO.update(customerDTO);
@@ -41,6 +44,7 @@ public class CustomerBOImpl {
         }
     }
 
+    @Override
     public boolean isCustomerExists(String id) {
         try {
             return customerDAO.exists(id);
@@ -52,6 +56,7 @@ public class CustomerBOImpl {
         return false;
     }
 
+    @Override
     public void deleteCustomer(String id) {
         try {
             customerDAO.delete(id);
@@ -62,6 +67,7 @@ public class CustomerBOImpl {
         }
     }
 
+    @Override
     public String generateNewCustomerId() throws SQLException, ClassNotFoundException {
         return customerDAO.generateNewId();
     }
