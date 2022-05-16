@@ -1,11 +1,10 @@
 package controller;
 
-import bo.CustomerBO;
-import bo.CustomerBOImpl;
+import bo.custom.CustomerBO;
+import bo.custom.impl.CustomerBOImpl;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import dao.custom.CustomerDAO;
-import dao.custom.impl.CustomerDAOImpl;
+import dao.DAOFactory;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -43,7 +42,7 @@ public class ManageCustomersFormController {
     public TableView<CustomerTM> tblCustomers;
     public JFXButton btnAddNewCustomer;
 
-    private final CustomerBO customerBO = new CustomerBOImpl();
+    private final CustomerBO customerBO = (CustomerBO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.CUSTOMER);
 
     public void initialize() {
         tblCustomers.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
