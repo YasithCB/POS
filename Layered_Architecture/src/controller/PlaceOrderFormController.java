@@ -1,7 +1,7 @@
 package controller;
 
+import bo.BOFactory;
 import bo.custom.PlaceOrderBO;
-import bo.custom.impl.PlaceOrderBOImpl;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
@@ -55,7 +55,7 @@ public class PlaceOrderFormController {
     public Label lblTotal;
 
     private String orderId;
-    PlaceOrderBO placeOrderBO = new PlaceOrderBOImpl();
+    PlaceOrderBO placeOrderBO = (PlaceOrderBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.ORDER);
 
     public void initialize() {
 
