@@ -1,18 +1,16 @@
 package bo.custom;
 
 import bo.SuperBO;
-import model.CustomerDTO;
-import model.ItemDTO;
-import model.OrderDetailDTO;
+import dto.CustomerDTO;
+import dto.ItemDTO;
+import dto.OrderDTO;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 public interface PlaceOrderBO extends SuperBO {
 
-    boolean placeOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException;
+    boolean placeOrder(OrderDTO orderDTO) throws SQLException, ClassNotFoundException;
 
     ItemDTO findItem(String code);
 

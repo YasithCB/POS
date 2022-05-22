@@ -1,36 +1,37 @@
-package model;
+package entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
-public class CustomDTO {
+public class CustomEntity {
     private String id;
     private String name;
     private String address;
 
     private String code;
     private String description;
-    private BigDecimal unitPrice;
     private int qtyOnHand;
+    private BigDecimal unitPrice;
 
-    private String orderId;
-    private LocalDate orderDate;
-    private String customerId;
-
-    private String oId;
+    private String oid;
     private String itemCode;
     private int qty;
+//    private BigDecimal unitPrice;
 
-    public CustomDTO() {
+    //    private String oid;
+    private LocalDate date;
+    private String customerID;
+
+
+    public CustomEntity() {
     }
 
-    public CustomDTO(String oId, LocalDate orderDate, String customerId, String itemCode, int qty,BigDecimal unitPrice) {
+    public CustomEntity(String oid,LocalDate date,String customerID, String itemCode, int qty,BigDecimal unitPrice ) {
         this.unitPrice = unitPrice;
-        this.orderDate = orderDate;
-        this.customerId = customerId;
-        this.oId = oId;
+        this.oid = oid;
         this.itemCode = itemCode;
         this.qty = qty;
+        this.date = date;
+        this.customerID = customerID;
     }
 
     public String getId() {
@@ -73,14 +74,6 @@ public class CustomDTO {
         this.description = description;
     }
 
-    public BigDecimal getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
     public int getQtyOnHand() {
         return qtyOnHand;
     }
@@ -89,36 +82,20 @@ public class CustomDTO {
         this.qtyOnHand = qtyOnHand;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
-    public LocalDate getOrderDate() {
-        return orderDate;
+    public String getOid() {
+        return oid;
     }
 
-    public void setOrderDate(LocalDate orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getoId() {
-        return oId;
-    }
-
-    public void setoId(String oId) {
-        this.oId = oId;
+    public void setOid(String oid) {
+        this.oid = oid;
     }
 
     public String getItemCode() {
@@ -135,5 +112,21 @@ public class CustomDTO {
 
     public void setQty(int qty) {
         this.qty = qty;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public String getCustomerID() {
+        return customerID;
+    }
+
+    public void setCustomerID(String customerID) {
+        this.customerID = customerID;
     }
 }

@@ -6,21 +6,19 @@ import dao.custom.CustomerDAO;
 import dao.custom.ItemDAO;
 import dao.custom.OrderDAO;
 import dao.custom.OrderDetailsDAO;
-import dao.custom.impl.CustomerDAOImpl;
-import dao.custom.impl.ItemDAOImpl;
-import dao.custom.impl.OrderDAOImpl;
-import dao.custom.impl.OrderDetailsDAOImpl;
 import db.DBConnection;
-import model.CustomerDTO;
-import model.ItemDTO;
-import model.OrderDTO;
-import model.OrderDetailDTO;
+import dto.CustomerDTO;
+import dto.ItemDTO;
+import dto.OrderDTO;
+import dto.OrderDetailDTO;
+import entity.Customer;
+import entity.Item;
+import entity.OrderDetails;
+import entity.Orders;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 public class PlaceOrderBOImpl implements PlaceOrderBO {
 
@@ -30,24 +28,24 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
     private final OrderDetailsDAO orderDetailsDAO = (OrderDetailsDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.ODERDETAILS);
 
     @Override
-    public boolean placeOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
+    public boolean placeOrder(OrderDTO orderDTO) throws SQLException, ClassNotFoundException {
         /*Transaction*/
 
         Connection connection = DBConnection.getDbConnection().getConnection() ;
         /*if order id already exist*/
-        if (orderDAO.exists(orderId)) {
+        if (orderDAO.exists(orderDTO.getOrderId())) {
 
         }
 
-        if (!orderDAO.insert(new OrderDTO(orderId, orderDate, customerId))) {
+        if (!orderDAO.insert(new Orders(orderDTO.getOrderId(), orderDTO.getOrderDate(), orderDTO.getCustomerId()))) {
             connection.rollback();
             connection.setAutoCommit(true);
             return false;
         }
 
-        for (OrderDetailDTO dto : orderDetails) {
+        for (OrderDetailDTO dto : orderDTO.getOrderDetails()) {
 
-            if (!orderDetailsDAO.insert(new OrderDetailDTO(orderId, dto.getItemCode(), dto.getQty(), dto.getUnitPrice()))) {
+            if (!orderDetailsDAO.insert(new OrderDetails(dto.getoId(),dto.getItemCode(),dto.getQty(),dto.getUnitPrice()))) {
                 connection.rollback();
                 connection.setAutoCommit(true);
                 return false;
@@ -57,7 +55,7 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
             ItemDTO item = findItem(dto.getItemCode());
             item.setQtyOnHand(item.getQtyOnHand() - dto.getQty());
 
-            if (!itemDAO.update(item)) {
+            if (!itemDAO.update(new Item(item.getCode(),item.getDescription(),item.getQtyOnHand(),item.getUnitPrice()))) {
                 connection.rollback();
                 connection.setAutoCommit(true);
                 return false;
@@ -73,7 +71,7 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
     @Override
     public ItemDTO findItem(String code) {
         try {
-            ItemDTO dto = itemDAO.search(code + "");
+            Item dto = itemDAO.search(code + "");
             return new ItemDTO(code, dto.getDescription(), dto.getUnitPrice(), dto.getQtyOnHand());
 
         } catch (SQLException e) {
@@ -87,7 +85,8 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
     @Override
     public CustomerDTO searchCustomer(String id){
         try {
-            customerDAO.search(id);
+            Customer search = customerDAO.search(id);
+            return new CustomerDTO(search.getId(),search.getName(),search.getAddress());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -99,7 +98,8 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
     @Override
     public ItemDTO searchItem(String code){
         try {
-            itemDAO.search(code);
+            Item search = itemDAO.search(code);
+            return new ItemDTO(search.getCode(),search.getDescription(),search.getUnitPrice(),search.getQtyOnHand());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -147,7 +147,16 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
     @Override
     public ArrayList<CustomerDTO> getAllCustomers() {
         try {
-            return customerDAO.getAll();
+            ArrayList<CustomerDTO> allDTO = new ArrayList<>();
+            ArrayList<Customer> all = customerDAO.getAll();
+            for (Customer customer : all){
+                allDTO.add(new CustomerDTO(
+                        customer.getId(),
+                        customer.getName(),
+                        customer.getAddress()
+                ));
+            }
+            return allDTO;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -159,7 +168,16 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
     @Override
     public ArrayList<ItemDTO> getAllItems() {
         try {
-            return itemDAO.getAll();
+            ArrayList<ItemDTO> allDTO = new ArrayList<>();
+            ArrayList<Item> all = itemDAO.getAll();
+            for (Item item : all){
+                allDTO.add(new ItemDTO(
+                        item.getCode(),
+                        item.getDescription(),
+                        item.getUnitPrice(),
+                        item.getQtyOnHand()
+                ));
+            }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
